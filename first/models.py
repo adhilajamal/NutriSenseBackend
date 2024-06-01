@@ -52,7 +52,7 @@ class Patient(models.Model):
             return cls.objects.get(email=email)
         except cls.DoesNotExist:
             return None
-        
+   
 class Appointment(models.Model):
     dr_name = models.CharField(max_length=20)
     patient_name = models.CharField(max_length=20)
@@ -69,6 +69,14 @@ class Appointment(models.Model):
             return cls.objects.get(district=district)
         except cls.DoesNotExist:
             return None
+
+# class Feedback(models.Model):
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+#     feedback_text = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f'Feedback from {self.patient.user_name}'
 
 
         
