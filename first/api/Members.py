@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ..models import Doctor , Patient
+from rest_framework.authtoken.models import Token
 
 
 @api_view(['POST'])
@@ -9,9 +10,7 @@ def loginUser(request):
     try:
         email = data['email']
         pwd = data['pwd']
-        
 
-    
         if email is None or pwd is None:
             return Response({'message': 'Email and password are required'})
         
@@ -33,10 +32,7 @@ def loginUser(request):
                return Response({'message' : 'Incorrect Password'},status=401)
             
             return Response({'message' : 'User not found' },status=404)
-        
-        
-        
-        
+ 
     except Exception as e:
         print(e)  # Print the exception for debugging purposes
         return Response({'message': 'An error occurred while processing your request'}, status=500)
@@ -46,7 +42,7 @@ def DoctorRegistration(request):
     
     try:
         data = request.data 
-        print('data',data)
+        # print('data',data)
         
         if not data.get('user_name'):
             return Response({'message': "Value not found username"},status=404)
@@ -55,9 +51,9 @@ def DoctorRegistration(request):
         if not data.get('pwd'):
             return Response({'message': "Value not found password"},status=404)
         if Doctor.get_by_email(data['email']):
-            return Response({'message' : 'Email already exist'},status=500)
+            return Response({'message' : 'Email already exist'},status=501)
         if Patient.get_by_email(data['email']):
-            return Response({'message' : 'Email already exist'},status=500)
+            return Response({'message' : 'Email already exist'},status=501)
         
         
         
@@ -85,7 +81,7 @@ def PatientRegistration(request):
     
     try:
         data = request.data 
-        print('data',data)
+        # print('data',data)
         
         if not data.get('user_name'):
             return Response({'message': "Value not found username"},status=404)
@@ -113,6 +109,20 @@ def PatientRegistration(request):
     except Exception as e:
         print(e)  # Print the exception for debugging purposes
         return Response({'message': 'An error occurred while processing your request'}, status=500)
+    
+@api_view(['POST'])
+def logoutUser(request):
+    try:
+        token_key = request.headers.get('Authorization').split(' ')[1]
+        token = Token.objects.get(key=token_key)
+        token.delete()
+        return Response({'message': 'Logged out successfully'}, status=200)
+    except (Token.DoesNotExist, AttributeError, IndexError):
+        return Response({'message': 'Invalid token'}, status=400)
+    except Exception as e:
+        print(e)  # Print the exception for debugging purposes
+        return Response({'message': 'An error occurred while processing your request'}, status=500)
+
     
     
 

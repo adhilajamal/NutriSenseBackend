@@ -12,7 +12,7 @@ class PatientAdmin(admin.ModelAdmin):
     fields = ('user_name','age','gender','contact','email','pwd','profile')
 admin.site.register(Patient,PatientAdmin)
 class AppointmentAdmin(admin.ModelAdmin):
-    fields = ('dr_name','patient_name','date','time','place','contact_no','patient_email')
+    fields = ('dr_email','dr_name','patient_name','date','time','place','contact_no','patient_email')
 admin.site.register(Appointment,AppointmentAdmin)
 # class FeedbackAdmin(admin.ModelAdmin):
 #     list_display = ('patient', 'feedback_text', 'created_at')

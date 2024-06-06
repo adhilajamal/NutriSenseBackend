@@ -35,6 +35,8 @@ def patientChangePassword(request):
     email = data.get('email')
     oldpassword = data.get('oldpassword')
     newpassword = data.get('newpassword')
+    if not email or not oldpassword or not newpassword:
+        return Response({'message': 'old password, and new password are required'}, status=400)
     patient = Patient.get_by_email_and_password(email,oldpassword)
     if not patient:
         return Response({'message':'Incorrect Password'},status=401)

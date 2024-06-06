@@ -9,7 +9,7 @@ class Doctor(models.Model):
     email     = models.CharField(max_length=50, unique= True)
     pwd       = models.CharField(max_length=20)
     doctorverify = models.BooleanField(default=0)
-    about = models.CharField(max_length=150)
+    about = models.CharField(max_length=500)
     address = models.CharField(max_length=50)
     district = models.CharField(max_length=15)
     workingtime = models.CharField(max_length=30)
@@ -54,14 +54,22 @@ class Patient(models.Model):
             return None
    
 class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    ]
+    dr_email = models.CharField(max_length=20)
     dr_name = models.CharField(max_length=20)
     patient_name = models.CharField(max_length=20)
     patient_email = models.EmailField(max_length=20)
     place = models.CharField(max_length=20)
     date = models.DateField(default='null')
     time = models.TimeField(default='null')
-    contact_no = models.IntegerField(default=0)
+    contact_no = models.BigIntegerField(default=0)
     district = models.CharField(max_length=20)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
 
     @classmethod
     def get_by_district(cls,district):
